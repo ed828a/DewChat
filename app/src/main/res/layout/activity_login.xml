@@ -9,11 +9,11 @@
 
     <ImageView
         android:id="@+id/register_login_logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,13 +25,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/inputs"
-        android:drawableLeft="@drawable/email"
+        android:drawableEnd="@drawable/email"
         android:ems="10"
-        android:hint="Email..."
+        android:hint="@string/email_text"
         android:inputType="textEmailAddress"
 
+        android:paddingStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_login_logo" />
@@ -44,24 +45,25 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/inputs"
-        android:drawableLeft="@drawable/password"
+        android:drawableEnd="@drawable/password"
         android:ems="10"
-        android:hint="Password..."
+        android:hint="@string/password"
         android:inputType="textPassword"
 
+        android:paddingStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_login_email" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/button"
-        android:text="log in"
+        android:text="@string/log_in"
         android:textColor="@android:color/background_light"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,19 +71,19 @@
         app:layout_constraintTop_toBottomOf="@+id/register_login_password" />
 
     <TextView
-        android:id="@+id/register_account_link"
+        android:id="@+id/registerAccountLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Don't have an Account, Need new account?"
+        android:text="@string/no_account"
         android:textAlignment="center"
         android:textColor="?android:attr/colorAccent"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <TextView
         android:id="@+id/or_login_with"
@@ -92,13 +94,13 @@
         android:layout_marginTop="16dp"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
-        android:text="Or log in with"
+        android:text="@string/log_in_with"
         android:textAllCaps="false"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_account_link" />
+        app:layout_constraintTop_toBottomOf="@+id/registerAccountLink" />
 
 
     <ImageView
@@ -141,13 +143,11 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Forget Password?"
+        android:text="@string/forget_password"
         android:textAlignment="center"
         android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/twitter_signin_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

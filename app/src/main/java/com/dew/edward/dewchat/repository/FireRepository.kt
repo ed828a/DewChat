@@ -8,11 +8,12 @@ import com.google.firebase.storage.FirebaseStorage
 /**
  *   Created by Edward on 8/31/2018.
  */
-object FireRepository {
+class FireRepository {
     val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     val currentUserId = mAuth.currentUser?.uid
     val firestore = FirebaseFirestore.getInstance()
     val firestorage = FirebaseStorage.getInstance()
     val firestoragRef = firestorage.reference
+
 
 }
