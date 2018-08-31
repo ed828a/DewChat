@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#7eef19</color>
+    <color name="colorPrimaryDark">#67c415</color>
+    <color name="colorAccent">#e9ebee</color>
+    <color name="colorDescription">#014701</color>
+    <color name="colorProfile">#3B4041</color>
+    <color name="mainBackground">#D7D7D7</color>
+    <color name="sendercolor">#A0179E</color>
+    <color name="receiverMessageColor">#fcf8d2</color>
+</resources>

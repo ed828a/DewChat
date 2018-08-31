@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1014699663961",
+    "firebase_url": "https://dewchat-1aea2.firebaseio.com",
+    "project_id": "dewchat-1aea2",
+    "storage_bucket": "dewchat-1aea2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014699663961:android:39bb9ad5918a18a2",
+        "android_client_info": {
+          "package_name": "com.dew.edward.dewchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014699663961-0hamt27orr6usd6sarq9jcf5c4php9ov.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dew.edward.dewchat",
+            "certificate_hash": "7e9220eb9e2f55b4fe8d84bea98d3f2be79f4ddd"
+          }
+        },
+        {
+          "client_id": "1014699663961-l4u846f122nh77liufbijb781gr9i9p4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaiO3Xhe6PuvmROswaaYa-FoV6egPyZZM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014699663961-l4u846f122nh77liufbijb781gr9i9p4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
