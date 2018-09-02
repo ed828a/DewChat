@@ -9,7 +9,12 @@
     <string name="email_text">Email...</string>
     <string name="password">Password...</string>
     <string name="log_in">log in</string>
-    <string name="no_account">Don\'t have an Account, Need new account?</string>
-    <string name="log_in_with">Or log in with</string>
+    <string name="no_account">Do you need a new account?</string>
+    <string name="log_in_with">log in with</string>
     <string name="forget_password">Forget Password?</string>
+    <string name="comfirm_password">Comfirm Password...</string>
+    <string name="create_account">create account</string>
+    <string name="reset_message">Please provide your account email, an email with a password reset link will be sent to you. take care!</string>
+    <string name="reset_password">reset password</string>
+    <string name="account_email_address">account email address</string>
 </resources>

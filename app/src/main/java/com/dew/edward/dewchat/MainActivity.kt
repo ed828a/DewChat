@@ -1,5 +1,6 @@
 package com.dew.edward.dewchat
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
@@ -8,15 +9,25 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.dew.edward.dewchat.di.DewChatApp
+import com.dew.edward.dewchat.repository.FireRepository
+import com.dew.edward.dewchat.ui.LoginActivity
+import com.dew.edward.dewchat.ui.SetupActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    @Inject
+    lateinit var repository: FireRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        DewChatApp.appComponent.inject(this)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -50,8 +61,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.action_settings -> return true
+            R.id.action_settings -> {
+                return true
+            }
+
+            R.id.user_profile -> {
+                startActivity(Intent(this, SetupActivity::class.java))
+                return true
+            }
+
+            R.id.need_verify_email -> {
+                DewChatApp.isNeedEmailVerification = !DewChatApp.isNeedEmailVerification
+                return true
+            }
+
+            R.id.settings_sign_out ->{
+                repository.signOut()
+                sendUserToLoginActivity()
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun sendUserToLoginActivity() {
+        val intent = Intent(this@MainActivity, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        if (!this@MainActivity.isFinishing){
+            finish()
         }
     }
 

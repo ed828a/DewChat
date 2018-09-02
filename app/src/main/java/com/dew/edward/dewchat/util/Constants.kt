@@ -7,3 +7,4 @@ package com.dew.edward.dewchat.util
 
 
 const val RC_SIGN_IN = 1
+const val RC_IMAGE_PICK = 2

@@ -11,7 +11,11 @@ class DewChatApp: Application() {
 
     companion object {
         lateinit var appComponent: AppComponent
+
+        // control email verification, controlled by owner only
+        var isNeedEmailVerification: Boolean = true
     }
+
 
 
     override fun onCreate() {
@@ -22,9 +26,11 @@ class DewChatApp: Application() {
             return
         }
         LeakCanary.install(this)
+
         // Normal app init code here ...
         appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .build()
+
     }
 }
