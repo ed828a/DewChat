@@ -20,16 +20,16 @@
         app:srcCompat="@drawable/dew_logo" />
 
     <EditText
-        android:id="@+id/register_login_email"
+        android:id="@+id/inputTextLoginEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/inputs"
-        android:drawableLeft="@drawable/email"
+        android:drawableStart="@drawable/email"
         android:ems="10"
-        android:hint="Email..."
+        android:hint="@string/email_hint"
         android:inputType="textEmailAddress"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,51 +37,51 @@
         app:layout_constraintTop_toBottomOf="@+id/register_login_logo" />
 
     <EditText
-        android:id="@+id/register_login_password"
+        android:id="@+id/inputTextLoginPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/inputs"
-        android:drawableLeft="@drawable/password"
+        android:drawableStart="@drawable/password"
         android:ems="10"
-        android:hint="Password..."
+        android:hint="@string/password_hint"
         android:inputType="textPassword"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_login_email" />
+        app:layout_constraintTop_toBottomOf="@+id/inputTextLoginEmail" />
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/loginButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/button"
-        android:text="log in"
+        android:text="@string/log_in"
         android:textColor="@android:color/background_light"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_login_password" />
+        app:layout_constraintTop_toBottomOf="@+id/inputTextLoginPassword" />
 
     <TextView
-        android:id="@+id/register_account_link"
+        android:id="@+id/registerAccountLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="Don't have an Account, Need new account?"
+        android:text="@string/don_t_have_an_account_sign_up_here"
         android:textAlignment="center"
-        android:textColor="?android:attr/colorAccent"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <TextView
         android:id="@+id/or_login_with"
@@ -92,13 +92,13 @@
         android:layout_marginTop="16dp"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
-        android:text="Or log in with"
+        android:text="@string/or_log_in_with"
         android:textAllCaps="false"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_account_link" />
+        app:layout_constraintTop_toBottomOf="@+id/registerAccountLink" />
 
 
     <ImageView
@@ -117,13 +117,13 @@
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/twitter"
-        app:layout_constraintEnd_toStartOf="@+id/google_signin_button"
+        app:layout_constraintEnd_toStartOf="@+id/googleSignInButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/facebook_signin_button"
         app:layout_constraintTop_toBottomOf="@+id/or_login_with" />
 
     <ImageView
-        android:id="@+id/google_signin_button"
+        android:id="@+id/googleSignInButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"
@@ -135,19 +135,32 @@
 
 
     <TextView
-        android:id="@+id/forget_password_link"
+        android:id="@+id/forgetPasswordLink"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Forget Password?"
+        android:text="@string/forget_password"
         android:textAlignment="center"
         android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/twitter_signin_button" />
+
+    <ProgressBar
+        android:id="@+id/loginProgressBar"
+        android:layout_centerInParent="true"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:indeterminateDuration="2000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>

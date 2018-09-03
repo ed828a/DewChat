@@ -6,6 +6,6 @@
     <color name="colorDescription">#014701</color>
     <color name="colorProfile">#3B4041</color>
     <color name="mainBackground">#D7D7D7</color>
-    <color name="sendercolor">#A0179E</color>
+    <color name="sendercolor">#a0179e</color>
     <color name="receiverMessageColor">#fcf8d2</color>
 </resources>
