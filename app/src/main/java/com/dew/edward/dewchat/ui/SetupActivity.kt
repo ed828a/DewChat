@@ -9,9 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import com.dew.edward.dewchat.MainActivity
 import com.dew.edward.dewchat.R
-import com.dew.edward.dewchat.R.drawable.username
-import com.dew.edward.dewchat.di.DewChatApp
-import com.dew.edward.dewchat.repository.FireRepository
+import com.dew.edward.dewchat.util.DbUtil
 import com.dew.edward.dewchat.util.AppUtil
 import com.dew.edward.dewchat.util.RC_IMAGE_PICK
 import com.dew.edward.dewchat.util.toast
@@ -23,23 +21,15 @@ import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_setup.*
-import java.util.*
-import javax.inject.Inject
 
 class SetupActivity : AppCompatActivity() {
     private val tag: String = this.javaClass.simpleName
-
-
-    @Inject
-    lateinit var repository: FireRepository
 
     private lateinit var loadingBar: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup)
-
-        DewChatApp.appComponent.inject(this)
 
         loadingBar = ProgressDialog(this)
 
@@ -55,7 +45,7 @@ class SetupActivity : AppCompatActivity() {
             saveUserAccountInformation()
         }
 
-        repository.usersRef.document(repository.mAuth.currentUser?.uid!!)
+        DbUtil.usersRef.document(DbUtil.mAuth.currentUser?.uid!!)
                 .addSnapshotListener { documentSnapshot,
                                        firebaseFirestoreException ->
                     if (documentSnapshot != null && documentSnapshot.exists()) {
@@ -96,7 +86,7 @@ class SetupActivity : AppCompatActivity() {
             inputFieldsMap["country"] = country
         }
 
-        repository.usersRef.document(repository.mAuth.currentUser?.uid!!)
+        DbUtil.usersRef.document(DbUtil.mAuth.currentUser?.uid!!)
                 .set(inputFieldsMap, SetOptions.merge())
     }
 
@@ -131,7 +121,7 @@ class SetupActivity : AppCompatActivity() {
                 "relationship" to "none",
                 "status" to "none"
         )
-        repository.usersRef.document(repository.mAuth.currentUser?.uid!!)
+        DbUtil.usersRef.document(DbUtil.mAuth.currentUser?.uid!!)
                 .set(userInfoMap, SetOptions.merge())
                 .addOnCompleteListener { task ->
                     AppUtil.dismissProgressDialog(loadingBar)
@@ -167,8 +157,8 @@ class SetupActivity : AppCompatActivity() {
                 AppUtil.showProgressDialog(loadingBar, "Profile Image",
                         "Your profile image is updating...")
 
-                val imageFilePath: StorageReference = repository.profileImageStorageRef
-                        .child("${repository.mAuth.currentUser?.uid!!}.jpg")
+                val imageFilePath: StorageReference = DbUtil.profileImageStorageRef
+                        .child("${DbUtil.mAuth.currentUser?.uid!!}.jpg")
                 // save profile image in FirebaseStorage
 
                 val uploadTask: UploadTask = imageFilePath.putFile(result.uri)
@@ -186,13 +176,14 @@ class SetupActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val downloadUrl = task.result.toString()
                                 val userMap = mutableMapOf<String, Any>("profileImageUrl" to downloadUrl)
-                                repository.usersRef.document(repository.mAuth.currentUser?.uid!!)
+                                DbUtil.usersRef.document(DbUtil.mAuth.currentUser?.uid!!)
                                         .set(userMap, SetOptions.merge())
                                         .addOnCompleteListener { task ->
                                             AppUtil.dismissProgressDialog(loadingBar)
                                             if (task.isSuccessful) {
                                                 "Profile Image Url was stored successfully...".toast(this)
                                                 Log.d(tag, "Profile Image Url was stored successfully. imageUrl=$downloadUrl")
+                                                val tem =  SetupActivity::class.java
                                                 startActivity(Intent(this, SetupActivity::class.java))
                                             } else {
                                                 "Storing Profile Image Url failed: ${task.exception?.message}"

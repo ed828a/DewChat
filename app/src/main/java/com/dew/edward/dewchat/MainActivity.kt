@@ -2,32 +2,26 @@ package com.dew.edward.dewchat
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.dew.edward.dewchat.di.DewChatApp
-import com.dew.edward.dewchat.repository.FireRepository
+import com.dew.edward.dewchat.ui.DetailsActivity
 import com.dew.edward.dewchat.ui.LoginActivity
 import com.dew.edward.dewchat.ui.SetupActivity
+import com.dew.edward.dewchat.util.DbUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-    @Inject
-    lateinit var repository: FireRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-
-        DewChatApp.appComponent.inject(this)
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -70,13 +64,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 return true
             }
 
-            R.id.need_verify_email -> {
-                DewChatApp.isNeedEmailVerification = !DewChatApp.isNeedEmailVerification
+            R.id.account_details -> {
+                startActivity(Intent(this@MainActivity, DetailsActivity::class.java))
                 return true
             }
 
             R.id.settings_sign_out ->{
-                repository.signOut()
+                DbUtil.signOut()
                 sendUserToLoginActivity()
                 return true
             }

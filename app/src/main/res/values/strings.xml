@@ -17,4 +17,13 @@
     <string name="reset_message">Please provide your account email, an email with a password reset link will be sent to you. take care!</string>
     <string name="reset_password">reset password</string>
     <string name="account_email_address">account email address</string>
+    <string name="update_account_details">update account details</string>
+    <string name="relationship_status">relationship status</string>
+    <string name="gender">gender</string>
+    <string name="date_of_birth">date of birth</string>
+    <string name="country">country</string>
+    <string name="full_name">full name</string>
+    <string name="user_name">user name</string>
+    <string name="profile_status">profile status</string>
+    <string name="save">Save</string>
 </resources>

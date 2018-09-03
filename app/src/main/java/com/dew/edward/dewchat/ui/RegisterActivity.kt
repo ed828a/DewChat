@@ -6,24 +6,20 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.dew.edward.dewchat.R
 import com.dew.edward.dewchat.di.DewChatApp
-import com.dew.edward.dewchat.repository.FireRepository
+import com.dew.edward.dewchat.util.DbUtil
 import com.dew.edward.dewchat.util.AppUtil.Companion.showProgressDialog
 import com.dew.edward.dewchat.util.toast
 import kotlinx.android.synthetic.main.activity_register.*
-import javax.inject.Inject
 
 class RegisterActivity : AppCompatActivity() {
     private val tag: String = this.javaClass.simpleName
 
-    @Inject
-    lateinit var repository: FireRepository
+
     private lateinit var loadingBar: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-
-        DewChatApp.appComponent.inject(this)
 
         loadingBar = ProgressDialog(this)
 
@@ -56,7 +52,7 @@ class RegisterActivity : AppCompatActivity() {
             showProgressDialog(loadingBar, "Create new account",
                     "Creating your new account...")
 
-            repository.mAuth.createUserWithEmailAndPassword(email, password)
+            DbUtil.mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         loadingBar.dismiss()
 
@@ -75,8 +71,8 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun sendEmailVerificationMessage() {
-        if (repository.mAuth.currentUser != null) {
-            repository.mAuth.currentUser!!.sendEmailVerification()
+        if (DbUtil.mAuth.currentUser != null) {
+            DbUtil.mAuth.currentUser!!.sendEmailVerification()
                     .addOnCompleteListener{task ->
                         if (task.isSuccessful){
                             "Confirmation Email was sent to you, please verify your account...".toast(this)
@@ -84,7 +80,7 @@ class RegisterActivity : AppCompatActivity() {
                         } else {
                             "Error: ${task.exception?.message}".toast(this)
                         }
-                        repository.signOut()
+                        DbUtil.signOut()
                     }
         }
 

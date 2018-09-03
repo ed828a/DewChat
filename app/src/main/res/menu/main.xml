@@ -11,8 +11,8 @@
         android:title="Profile"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/need_verify_email"
-        android:title="Veryfy User Email"
+        android:id="@+id/account_details"
+        android:title="Account Details"
         app:showAsAction="never"/>
 
     <item android:id="@+id/settings_sign_out"

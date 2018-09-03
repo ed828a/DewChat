@@ -5,11 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.ProgressBar
 import com.dew.edward.dewchat.MainActivity
 import com.dew.edward.dewchat.R
 import com.dew.edward.dewchat.di.DewChatApp
-import com.dew.edward.dewchat.repository.FireRepository
+import com.dew.edward.dewchat.util.DbUtil
 import com.dew.edward.dewchat.util.AppUtil
 import com.dew.edward.dewchat.util.AppUtil.Companion.showProgressDialog
 import com.dew.edward.dewchat.util.RC_SIGN_IN
@@ -21,12 +20,8 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
-import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var repository: FireRepository
 
     private lateinit var loadingBar: ProgressDialog
     private lateinit var googleSignInClient: GoogleApiClient
@@ -37,12 +32,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        DewChatApp.appComponent.inject(this)
-
         loadingBar = ProgressDialog(this)
 
         registerAccountLink.setOnClickListener {
-            FireRepository.signOut()
+            DbUtil.signOut()
             sendUserToRegisterActivity()
         }
 
@@ -52,32 +45,16 @@ class LoginActivity : AppCompatActivity() {
             if (loginEmail.isNotEmpty() && loginPassword.isNotEmpty()) {
                 showProgressDialog(loadingBar, "Google Sign in", "You are logging in your account...")
 
-                repository.mAuth
+                DbUtil.mAuth
                         .signInWithEmailAndPassword(loginEmail, loginPassword)
                         .addOnCompleteListener { task ->
                             loadingBar.dismiss()
                             if (task.isSuccessful) {
-                                val currentUserId = repository.mAuth.currentUser?.uid
+                                val currentUserId = DbUtil.mAuth.currentUser?.uid
                                 Log.d(tag, "currentUserId = $currentUserId")
-                                repository.usersRef.document("$currentUserId")
-                                        .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
-                                            if (firebaseFirestoreException != null) {
-                                                Log.d(tag, "Users listener error: ${firebaseFirestoreException.message}")
-                                                return@addSnapshotListener
-                                            }
-                                            Log.d(tag, "currentUserId = ${repository.mAuth.currentUser?.uid}")
-                                            if (documentSnapshot == null || !documentSnapshot.contains("status")) {
-                                                Log.d(tag, "user profile doesn't existing. ")
-                                                sendUserToSetupActivity()
-                                            } else {
-                                                "Login is successful...".toast(this) // this toast is redundant
-                                                if (DewChatApp.isNeedEmailVerification) {
-                                                    verifyEmailAddress()  // for email verification
-                                                } else {
-                                                    sendUserToMainActivity()  // without email verification
-                                                }
-                                            }
-                                        }
+                                currentUserId?.let {userId ->
+                                    listeningUser(userId, loadingBar)
+                                }
                             } else {
                                 "You don't have a account yet. Please create your account...".toast(this)
                                 Log.d(tag, "Login failed: ${task.exception?.message}")
@@ -124,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
             sendUserToMainActivity()
         } else {
             "Please verify your email first...".toast(this)
-            repository.signOut()
+            DbUtil.signOut()
         }
     }
 
@@ -139,7 +116,7 @@ class LoginActivity : AppCompatActivity() {
                 val account = result.signInAccount
                 // Firebase Authentication with Google Account
                 val credential: AuthCredential = GoogleAuthProvider.getCredential(account?.idToken, null)
-                repository.mAuth.signInWithCredential(credential)
+                DbUtil.mAuth.signInWithCredential(credential)
                         .addOnCompleteListener(this) { task ->
                             loadingBar.dismiss()
 
@@ -188,43 +165,26 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (repository.mAuth.currentUser != null) {
-            AppUtil.showProgressDialog(loadingBar, "Check Profile", "It's loading your account...")
-            val currentUserId = repository.mAuth.currentUser?.uid
-            Log.d(tag, "currentUserId = $currentUserId")
-            repository.usersRef.document("$currentUserId")
-                    .addSnapshotListener { documentSnapshot,
-                                           firebaseFirestoreException ->
-                        AppUtil.dismissProgressDialog(loadingBar)
-                        if (firebaseFirestoreException != null) {
-                            Log.d(tag, "Users listener error: ${firebaseFirestoreException.message}")
-                            return@addSnapshotListener
-                        }
+        if (DbUtil.mAuth.currentUser != null) {
 
-                        if (documentSnapshot == null || !documentSnapshot.contains("status")) {
-                            Log.d(tag, "user profile doesn't existing. ")
-                            sendUserToSetupActivity()
-                        } else {
-                            "Login is successful...".toast(this) // this toast is redundant
-                            if (DewChatApp.isNeedEmailVerification) {
-                                verifyEmailAddress()  // for email verification
-                            } else {
-                                sendUserToMainActivity()  // without email verification
-                            }
-                        }
-                    }
+            val currentUserId = DbUtil.mAuth.currentUser?.uid
+            Log.d(tag, "currentUserId = $currentUserId")
+            currentUserId?.let {userId ->
+                listeningUser(userId, loadingBar)
+            }
         }
     }
 
-    private fun listeningUser(userId: String){
-
-        repository.usersRef.document("$userId")
+    private fun listeningUser(userId: String, loadingBar: ProgressDialog){
+        AppUtil.showProgressDialog(loadingBar, "Check Profile", "It's loading your account...")
+        DbUtil.usersRef.document("$userId")
                 .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+                    AppUtil.dismissProgressDialog(loadingBar)
                     if (firebaseFirestoreException != null) {
                         Log.d(tag, "Users listener error: ${firebaseFirestoreException.message}")
                         return@addSnapshotListener
                     }
-                    Log.d(tag, "currentUserId = ${repository.mAuth.currentUser?.uid}")
+                    Log.d(tag, "currentUserId = ${DbUtil.mAuth.currentUser?.uid}")
                     if (documentSnapshot == null || !documentSnapshot.contains("status")) {
                         Log.d(tag, "user profile doesn't existing. ")
                         sendUserToSetupActivity()
