@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login"
+    tools:context=".ui.DetailsActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/detailsProfileImage"
+                android:layout_width="@dimen/space_150dp"
+                android:layout_height="@dimen/space_150dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/profile" />
+
+            <EditText
+                android:id="@+id/detailsStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsProfileImage"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:background="@drawable/inputs"
+                android:hint="@string/profile_status"
+                android:padding="@dimen/space_12dp"
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/detailsUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsStatus"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:padding="@dimen/space_12dp"
+                android:background="@drawable/inputs"
+                android:hint="@string/user_name"
+
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/detailsFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsUserName"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:background="@drawable/inputs"
+                android:hint="@string/full_name"
+                android:padding="@dimen/space_12dp"
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/detailsCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsFullName"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:padding="@dimen/space_12dp"
+                android:background="@drawable/inputs"
+                android:hint="@string/country"
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/detailsDOB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsCountry"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:padding="@dimen/space_12dp"
+                android:background="@drawable/inputs"
+                android:hint="@string/date_of_birth"
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/detailsGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsDOB"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:padding="@dimen/space_12dp"
+                android:background="@drawable/inputs"
+                android:hint="@string/gender"
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/detailsRelationship"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detailsGender"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:padding="@dimen/space_12dp"
+                android:background="@drawable/inputs"
+                android:hint="@string/relationship_status"
+                android:textColor="@android:color/background_dark"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/updateAccountDetailsButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="@string/update_account_details"
+                android:layout_marginLeft="@dimen/space_32dp"
+                android:layout_marginRight="@dimen/space_32dp"
+                android:layout_marginTop="@dimen/space_16dp"
+                android:background="@drawable/button"
+                android:textColor="@android:color/background_light"
+                android:textSize="22sp"
+                android:layout_below="@id/detailsRelationship"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
+</FrameLayout>
