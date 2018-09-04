@@ -19,7 +19,6 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
@@ -38,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener {
-            val loginEmail = inputTextLoginEmail.text.trim().toString()
+            val loginEmail = inputTextRegisterEmail.text.trim().toString()
             val loginPassword = inputTextLoginPassword.text.trim().toString()
             if (loginEmail.isNotEmpty() && loginPassword.isNotEmpty()) {
                 loginProgressBar.visibility = View.VISIBLE
@@ -123,8 +122,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun listeningUser(userId: String, loadingBar: ProgressBar){
         AppUtil.showProgressBar(loadingBar)
-//        DbUtil.usersRef.document("$userId")
-          FirebaseFirestore.getInstance().collection("Users").document("$userId")
+        DbUtil.usersRef.document("$userId")
+//          FirebaseFirestore.getInstance().collection("Users").document("$userId")
                 .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
                     AppUtil.dismissProgressBar(loadingBar)
                     if (firebaseFirestoreException != null) {
@@ -177,16 +176,12 @@ class LoginActivity : AppCompatActivity() {
     private fun sendUserToResetPasswordActivity() {
         val intent = Intent(this@LoginActivity, ResetPasswordActivity::class.java)
         startActivity(intent)
-//        if (!this@LoginActivity.isFinishing){
-//            finish()
-//        }
+
     }
 
     private fun sendUserToRegisterActivity() {
         val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
         startActivity(intent)
-//        if (!this@LoginActivity.isFinishing){
-//            finish()
-//        }
+
     }
 }

@@ -20,17 +20,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
+
         <activity
             android:name=".ui.LoginActivity"
-            android:launchMode="singleTop" />
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:launchMode="singleTask" />
+
         <activity
             android:name=".ui.SetupActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:parentActivityName=".MainActivity"
             android:launchMode="singleTop" />
+
         <activity
             android:name=".ui.DetailsActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:launchMode="singleTop" />
-        <activity android:name=".ui.RegisterActivity" />
-        <activity android:name=".ui.ResetPasswordActivity"></activity>
+
+        <activity android:name=".ui.RegisterActivity"
+            android:parentActivityName=".ui.LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
+        <activity android:name=".ui.ResetPasswordActivity"
+            android:parentActivityName=".ui.LoginActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+
     </application>
 
 </manifest>

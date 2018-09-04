@@ -14,7 +14,6 @@ import com.dew.edward.dewchat.ui.DetailsActivity
 import com.dew.edward.dewchat.ui.LoginActivity
 import com.dew.edward.dewchat.ui.SetupActivity
 import com.dew.edward.dewchat.util.DbUtil
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -53,8 +52,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun checkUserExistence() {
         val currentUserId = DbUtil.mAuth.currentUser?.uid
         if (currentUserId != null) {
-            FirebaseFirestore.getInstance().collection("Users").document(currentUserId)
-//              DbUtil.usersRef.document(currentUserId)
+//            FirebaseFirestore.getInstance().collection("Users").document(currentUserId)
+              DbUtil.usersRef.document(currentUserId)
                     .addSnapshotListener { documentSnapshot,
                                            exception ->
                         if (exception != null){

@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 
 /**
@@ -14,17 +15,23 @@ companion object {
     val mAuth: FirebaseAuth
             get() = FirebaseAuth.getInstance()
 
-    private val db: FirebaseFirestore
+    val db: FirebaseFirestore
             get() = FirebaseFirestore.getInstance()
     val usersRef: CollectionReference
-            get() = db.collection("Users")
-//    val messagesRef: CollectionReference = db.collection("Messages")
-//    val postsRef: CollectionReference = db.collection("Posts")
-//    val friendsRef: CollectionReference = db.collection("Friends")
-//    val LikesRef: CollectionReference = db.collection("Likes")
+            get() = FirebaseFirestore.getInstance().collection("Users")
+    val messagesRef: CollectionReference
+            get() = FirebaseFirestore.getInstance().collection("Messages")
+    val postsRef: CollectionReference
+            get() = FirebaseFirestore.getInstance().collection("Posts")
+    val friendsRef: CollectionReference
+            get() = FirebaseFirestore.getInstance().collection("Friends")
+    val LikesRef: CollectionReference
+            get() = FirebaseFirestore.getInstance().collection("Likes")
 
-    val fireStorageInstance by lazy { FirebaseStorage.getInstance() }
-    val profileImageStorageRef = fireStorageInstance.reference.child("profile_images")
+    val fireStorageInstance: FirebaseStorage
+            get() = FirebaseStorage.getInstance()
+    val profileImageStorageRef: StorageReference
+            get() = FirebaseStorage.getInstance().reference.child("profile_images")
 
     fun signOut() = mAuth.signOut()
 }

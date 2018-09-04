@@ -6,7 +6,7 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="space_120dp">120dp</dimen>
-    <dimen name="profile_image_height">120dp</dimen>
+    <dimen name="space_logo_image">150dp</dimen>
     <dimen name="space_8dp">8dp</dimen>
     <dimen name="space_16dp">16dp</dimen>
     <dimen name="space_4dp">4dp</dimen>
