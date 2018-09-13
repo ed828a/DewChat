@@ -30,7 +30,7 @@ dependencies {
     implementation "com.android.support:support-v4:$support_version"
     implementation "com.android.support:design:$support_version"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "com.android.support:recyclerview-v7:$support_version"
+//    implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "com.android.support:cardview-v7:$support_version"
 
     def firebase_ui_version = "4.1.0"

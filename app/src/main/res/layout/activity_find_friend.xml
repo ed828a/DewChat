@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login"
+    tools:context=".ui.FindFriendActivity">
+
+    <TextView
+        android:id="@+id/find_simpleTextId"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingStart="8dp"
+        android:text="Search for people and friends..."
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/searchInputText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/find_simpleTextId"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/inputs"
+        android:ems="10"
+        android:hint="search here ..."
+        android:inputType="textMultiLine"
+        android:paddingBottom="@dimen/space_4dp"
+        android:paddingStart="8dp"
+        android:paddingTop="@dimen/space_4dp"
+        android:textColor="@color/colorProfile"
+        android:textColorHint="@color/colorProfile"
+        app:layout_constraintBottom_toBottomOf="@+id/searchFriendButton"
+        app:layout_constraintEnd_toStartOf="@+id/searchFriendButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/searchFriendButton" />
+
+    <ImageButton
+        android:id="@+id/searchFriendButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/inputs"
+        android:src="@drawable/ic_search_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/find_simpleTextId" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/searchResultList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchFriendButton"
+        tools:listitem="@layout/user_layout" />
+
+</android.support.constraint.ConstraintLayout>

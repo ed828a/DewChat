@@ -28,4 +28,21 @@
     <string name="or_log_in_with">Or log in with</string>
     <string name="password_hint">Password...</string>
     <string name="email_hint">Email...</string>
+    <string name="write_something">write something about the image...</string>
+    <string name="publish_post">publish post</string>
+    <string name="sign_out">Sign out</string>
+    <string name="gallery">Gallery</string>
+    <string name="account_details">Account Details</string>
+    <string name="profile">Profile</string>
+    <string name="updated_a_post">has been updated a post </string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="post_description">Post description...</string>
+    <string name="comments">Comments:</string>
+    <string name="write_a_comment_here">write a comment here.</string>
+    <string name="update_account_settings">update account settings</string>
+    <string name="send_friend_request">Send Friend Request</string>
+    <string name="accept_friend_request">Accept Friend Request</string>
+    <string name="cancel_friend_request">Cancel Friend Request</string>
+    <string name="unfriend_this_person">Unfriend this person</string>
 </resources>

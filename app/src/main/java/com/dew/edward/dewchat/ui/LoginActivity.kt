@@ -9,10 +9,7 @@ import android.widget.ProgressBar
 import com.dew.edward.dewchat.MainActivity
 import com.dew.edward.dewchat.R
 import com.dew.edward.dewchat.app.DewChatApp
-import com.dew.edward.dewchat.util.AppUtil
-import com.dew.edward.dewchat.util.DbUtil
-import com.dew.edward.dewchat.util.RC_SIGN_IN
-import com.dew.edward.dewchat.util.toast
+import com.dew.edward.dewchat.util.*
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
@@ -20,6 +17,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener {
+            AppUtil.hideKeyboard(this)
+
             val loginEmail = inputTextRegisterEmail.text.trim().toString()
             val loginPassword = inputTextLoginPassword.text.trim().toString()
             if (loginEmail.isNotEmpty() && loginPassword.isNotEmpty()) {
@@ -49,13 +49,24 @@ class LoginActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val currentUserId = DbUtil.mAuth.currentUser?.uid
                                 Log.d(tag, "currentUserId = $currentUserId")
-                                currentUserId?.let {userId ->
+                                currentUserId?.let { userId ->
                                     listeningUser(userId, loginProgressBar)
                                 }
                             } else {
-                                "You don't have a account yet. Please create your account...".toast(this)
                                 Log.d(tag, "Login failed: ${task.exception?.message}")
-                                sendUserToRegisterActivity()
+                                val message = task.exception?.message
+                                when (message) {
+                                    VALUE_INVALID_PASSWORD -> {
+                                        message.toast(this)
+                                    }
+                                    VALUE_NO_ACCOUNT -> {
+                                        "You don't have a account yet. Please create your account...".toast(this)
+                                        sendUserToRegisterActivity()
+                                    }
+                                    else -> {
+                                        message?.toast(this)
+                                    }
+                                }
                             }
                         }
             } else {
@@ -120,7 +131,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun listeningUser(userId: String, loadingBar: ProgressBar){
+    private fun listeningUser(userId: String, loadingBar: ProgressBar) {
         AppUtil.showProgressBar(loadingBar)
         DbUtil.usersRef.document("$userId")
 //          FirebaseFirestore.getInstance().collection("Users").document("$userId")
@@ -159,7 +170,7 @@ class LoginActivity : AppCompatActivity() {
     private fun sendUserToSetupActivity() {
         val intent = Intent(this@LoginActivity, SetupActivity::class.java)
         startActivity(intent)
-        if (!this@LoginActivity.isFinishing){
+        if (!this@LoginActivity.isFinishing) {
             finish()
         }
     }
@@ -168,7 +179,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
-        if (!this@LoginActivity.isFinishing){
+        if (!this@LoginActivity.isFinishing) {
             finish()
         }
     }

@@ -29,6 +29,12 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+            it.title = "Account Details"
+        }
+
         updateAccountDetailsButton.setOnClickListener {
             updateAccountDetails()
         }
@@ -93,7 +99,10 @@ class DetailsActivity : AppCompatActivity() {
     private fun sendUserToMainActivity() {
         val intent = Intent(this@DetailsActivity, MainActivity::class.java)
         startActivity(intent)
-        finish()
+        if (!this@DetailsActivity.isFinishing){
+            finish()
+        }
+
     }
 
     override fun onStart() {
