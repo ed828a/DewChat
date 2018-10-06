@@ -5,9 +5,10 @@ package com.dew.edward.dewchat.util
  *   Created by Edward on 9/3/2018.
  */
 
-
+// RequestCode
 const val RC_SIGN_IN = 1
 const val RC_IMAGE_PICK = 2
+const val RC_FACEBOOK_LOGIN = 64206
 
 // Values
 const val VALUE_NOT_FRIEND = "not_friend"
@@ -23,5 +24,10 @@ const val KEY_DATE = "date"
 
 // Intent Extra Keys
 const val KEY_EXTRA_DISPLAY_MY_POSTS = "display_my_posts"
-const val KEY_EXTRA_LISTED_USER_ID = "listedUserId"
-const val KEY_EXTRA_USER_NAME = "userName"
+const val KEY_EXTRA_LISTED_USER_ID = "USER_ID"
+const val KEY_EXTRA_USER_NAME = "USER_NAME"
+
+
+// Shared Preference
+const val SHARED_PREF_NAME = "dewpreferences"
+const val KEY_ACCESS_TOKEN = "registrationToken"

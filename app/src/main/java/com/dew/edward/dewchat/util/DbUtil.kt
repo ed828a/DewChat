@@ -1,9 +1,12 @@
 package com.dew.edward.dewchat.util
 
+import com.dew.edward.dewchat.model.UserData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
@@ -30,10 +33,7 @@ class DbUtil {
             get() = FirebaseFirestore.getInstance().collection("Messages")
         val postsRef: CollectionReference
             get() = FirebaseFirestore.getInstance().collection("Posts")
-//        val friendsRef: CollectionReference
-//            get() = FirebaseFirestore.getInstance().collection("Friends")
-//        val LikesRef: CollectionReference
-//            get() = FirebaseFirestore.getInstance().collection("Likes")
+
 
         // FirebaseStorage
         val fireStorageInstance: FirebaseStorage
@@ -46,6 +46,29 @@ class DbUtil {
             get() = FirebaseStorage.getInstance().reference.child("message_images")
 
         fun signOut() = mAuth.signOut()
+
+        // FCM region
+        private val currentUserDocRef: DocumentReference
+            get() = usersRef.document(currentUserId!!)
+
+        fun getFCMRegistrationTokens(onComplete: (tokens: MutableList<String>) -> Unit) {
+            if (currentUserId != null) {
+                currentUserDocRef.get().addOnSuccessListener {
+                    it?.let {
+                        val user = it.toObject(UserData::class.java)!!
+                        onComplete(user.registrationTokens)
+                    }
+
+                }
+            }
+        }
+
+        fun setFCMRegistrationTokens(registrationTokens: MutableList<String>){
+            if (currentUserId != null){
+                currentUserDocRef.set(mapOf("registrationTokens" to registrationTokens), SetOptions.merge())
+            }
+        }
+        // end FCM region
     }
 
 }

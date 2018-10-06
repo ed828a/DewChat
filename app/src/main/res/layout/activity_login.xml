@@ -106,7 +106,7 @@
 
 
     <ImageView
-        android:id="@+id/facebook_signin_button"
+        android:id="@+id/facebookSignInButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/facebook"
@@ -125,7 +125,7 @@
         app:layout_constraintBottom_toTopOf="@+id/forgetPasswordLink"
         app:layout_constraintEnd_toStartOf="@+id/googleSignInButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/facebook_signin_button" />
+        app:layout_constraintStart_toEndOf="@+id/facebookSignInButton" />
 
     <ImageView
         android:id="@+id/googleSignInButton"
@@ -137,6 +137,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/twitter_signin_button"
         app:layout_constraintTop_toTopOf="@+id/twitter_signin_button" />
+
 
 
     <TextView

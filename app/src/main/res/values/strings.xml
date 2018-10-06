@@ -45,4 +45,7 @@
     <string name="accept_friend_request">Accept Friend Request</string>
     <string name="cancel_friend_request">Cancel Friend Request</string>
     <string name="unfriend_this_person">Unfriend this person</string>
+    <string name="facebook_app_id">741091476232556</string>
+    <string name="fb_login_protocol_scheme">fb741091476232556</string>
+
 </resources>

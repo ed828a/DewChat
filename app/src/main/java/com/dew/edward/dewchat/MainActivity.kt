@@ -18,11 +18,9 @@ import com.dew.edward.dewchat.adapter.ContactAdapter
 import com.dew.edward.dewchat.adapter.PostAdapter
 import com.dew.edward.dewchat.model.Friend
 import com.dew.edward.dewchat.model.PostData
-import com.dew.edward.dewchat.model.UserData
 import com.dew.edward.dewchat.ui.*
 import com.dew.edward.dewchat.util.DbUtil
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.Query
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -49,22 +47,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-        displayNavigation(this)
+//        displayNavigation(this)
         displayAllPosts()
     }
 
     private fun displayNavigation(context: Context) {
         if (DbUtil.currentUserId != null) {
-            DbUtil.usersRef.document(DbUtil.currentUserId!!)
-                    .get()
-                    .addOnSuccessListener { documentSnapshot ->
-                        val profileImage = documentSnapshot.getString("profileImageUrl")
-                        val fullName = documentSnapshot.getString("userFullName")
-                        navUserNameText.text = fullName
-                        if (profileImage != null && profileImage.isNotEmpty()) {
-                            Picasso.get().load(profileImage).into(navUserProfileImage)
-                        }
-                    }
 
             navChannelList.setHasFixedSize(true)
 
@@ -107,18 +95,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Log.d(tag, "adapter.itemCount = ${adapter.itemCount}")
     }
 
-
     override fun onStart() {
         super.onStart()
         val currentUser = DbUtil.mAuth.currentUser
+
         if (currentUser == null) {
             sendUserToLoginActivity()
         } else {
-            checkUserExistence()
+            checkUserExistenceAndDisplayNavHeader()
+            displayNavigation(this)
         }
     }
 
-    private fun checkUserExistence() {
+    private fun checkUserExistenceAndDisplayNavHeader() {
         val currentUserId = DbUtil.mAuth.currentUser?.uid
         if (currentUserId != null) {
             DbUtil.usersRef.document(currentUserId)
@@ -131,6 +120,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                         if (documentSnapshot == null || !documentSnapshot.exists()) {
                             sendUserToSetupActivity()
+                        } else {
+                            if (documentSnapshot.exists()) {
+                                val profileImage = documentSnapshot.getString("profileImageUrl")
+                                val fullName = documentSnapshot.getString("userFullName")
+                                navUserNameText.text = fullName
+                                if (profileImage != null && profileImage.isNotEmpty()) {
+                                    Picasso.get().load(profileImage).into(navUserProfileImage)
+                                }
+                            }
                         }
                     }
         }
@@ -235,8 +233,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun sendUserToLoginActivity() {
         val intent = Intent(this@MainActivity, LoginActivity::class.java)
-        // this line cause the leakage
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
         if (!this@MainActivity.isFinishing) {
             finish()
@@ -246,14 +242,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun sendUserToSetupActivity() {
         val intent = Intent(this@MainActivity, SetupActivity::class.java)
         startActivity(intent)
-//        if (!this@MainActivity.isFinishing) {
-//            finish()
-//        }
     }
 
     private fun sendUserToPostActivity() {
         startActivity(Intent(this@MainActivity, PostActivity::class.java))
     }
-
 
 }

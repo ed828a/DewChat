@@ -6,17 +6,27 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.dew.edward.dewchat.MainActivity
 import com.dew.edward.dewchat.R
 import com.dew.edward.dewchat.app.DewChatApp
+import com.dew.edward.dewchat.service.FCMService
 import com.dew.edward.dewchat.util.*
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_login.*
+import java.util.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -24,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
     private val tag: String = this.javaClass.simpleName
 
     private lateinit var googleSignInClient: GoogleApiClient
+    private lateinit var callbackManager: CallbackManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +60,13 @@ class LoginActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 val currentUserId = DbUtil.mAuth.currentUser?.uid
                                 Log.d(tag, "currentUserId = $currentUserId")
+
+                                val sharePrefManager = SharePrefManager(applicationContext)
+                                val token = sharePrefManager.getToken()
+                                Log.d(tag, "SharedPre token=$token")
+                                if (token != null)
+                                    FCMService.addTokenToFirestore(token)
+
                                 currentUserId?.let { userId ->
                                     listeningUser(userId, loginProgressBar)
                                 }
@@ -85,10 +103,10 @@ class LoginActivity : AppCompatActivity() {
                 .build()
 
         googleSignInClient = GoogleApiClient.Builder(this@LoginActivity)
-                .enableAutoManage(this@LoginActivity, GoogleApiClient.OnConnectionFailedListener {
+                .enableAutoManage(this@LoginActivity) {
                     "Connection to Google SignIn failed".toast(this)
                     Log.d(tag, "Connection to Google SignIn failed: ${it.errorMessage}")
-                })
+                }
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build()
 
@@ -99,6 +117,62 @@ class LoginActivity : AppCompatActivity() {
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
 
+        callbackManager = CallbackManager.Factory.create()
+
+        facebookSignInButton.setOnClickListener {
+            facebookSignInButton.isEnabled = false
+            LoginManager.getInstance().logInWithReadPermissions(this@LoginActivity,
+                    Arrays.asList("email", "public_profile"))
+
+            with(LoginManager.getInstance()) {
+                registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(result: LoginResult?) {
+                        Log.d(tag, "facebook:onSuccess: $result")
+                        handleFacebookAccessToken(result!!.accessToken)
+                    }
+
+                    override fun onCancel() {
+                        Log.d(tag, "facebook:onCancel")
+
+                    }
+
+                    override fun onError(error: FacebookException?) {
+                        Log.d(tag, "facebook:onError: $error")
+                    }
+                })
+            }
+        }
+    }
+
+    private fun handleFacebookAccessToken(accessToken: AccessToken?) {
+        Log.d(tag, "handleFacebookAccessToken:$accessToken")
+
+        val credential = FacebookAuthProvider.getCredential(accessToken!!.token)
+        DbUtil.mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    facebookSignInButton.isEnabled = true
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(tag, "signInWithCredential:success")
+
+                        val sharePrefManager = SharePrefManager(applicationContext)
+                        val token = sharePrefManager.getToken()
+                        if (token != null)
+                            FCMService.addTokenToFirestore(token)
+
+                        val user = DbUtil.currentUser
+                        user?.let {
+                            sendUserToMainActivity()
+                        }
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(tag, "signInWithCredential:failure", task.exception)
+                        Toast.makeText(this@LoginActivity, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show()
+                    }
+                }
+
     }
 
 
@@ -106,35 +180,50 @@ class LoginActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess) {
-                val account = result.signInAccount
-                // Firebase Authentication with Google Account
-                val credential: AuthCredential = GoogleAuthProvider.getCredential(account?.idToken, null)
-                DbUtil.mAuth.signInWithCredential(credential)
-                        .addOnCompleteListener(this) { task ->
-                            loginProgressBar.visibility = View.GONE
+        when (requestCode) {
+            RC_SIGN_IN -> {
+                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+                if (result.isSuccess) {
+                    val account = result.signInAccount
+                    // Firebase Authentication with Google Account
+                    val credential: AuthCredential = GoogleAuthProvider.getCredential(account?.idToken, null)
+                    DbUtil.mAuth.signInWithCredential(credential)
+                            .addOnCompleteListener(this) { task ->
+                                loginProgressBar.visibility = View.GONE
 
-                            if (task.isSuccessful) {
-                                Log.d(tag, "signIn With Auth Credential: succeeded")
-                                sendUserToMainActivity()
-                            } else {
-                                Log.d(tag, "signIn With Auth Credential: failed, Error: ${task.exception?.message}")
-                                "signIn With Google failed, due to ${task.exception?.message}".toast(this)
+                                if (task.isSuccessful) {
+                                    Log.d(tag, "signIn With Auth Credential: succeeded")
+
+                                    val sharePrefManager = SharePrefManager(applicationContext)
+                                    val token = sharePrefManager.getToken()
+                                    if (token != null)
+                                        FCMService.addTokenToFirestore(token)
+
+                                    sendUserToMainActivity()
+                                } else {
+                                    Log.d(tag, "signIn With Auth Credential: failed, Error: ${task.exception?.message}")
+                                    "signIn With Google failed, due to ${task.exception?.message}".toast(this)
+                                }
                             }
-                        }
-            } else {
-                loginProgressBar.visibility = View.GONE
-                "sign-in failed: ${result?.toString()}".toast(this)
+                } else {
+                    loginProgressBar.visibility = View.GONE
+                    "sign-in failed: ${result?.toString()}".toast(this)
+                }
+            }
+
+            RC_FACEBOOK_LOGIN -> {
+                // callbackManager will call those callback functions to handle the input params of this function.
+                callbackManager.onActivityResult(requestCode, resultCode, data)
+
             }
         }
+
+
     }
 
     private fun listeningUser(userId: String, loadingBar: ProgressBar) {
         AppUtil.showProgressBar(loadingBar)
         DbUtil.usersRef.document("$userId")
-//          FirebaseFirestore.getInstance().collection("Users").document("$userId")
                 .addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
                     AppUtil.dismissProgressBar(loadingBar)
                     if (firebaseFirestoreException != null) {

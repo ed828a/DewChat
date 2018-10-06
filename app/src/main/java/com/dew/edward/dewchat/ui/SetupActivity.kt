@@ -9,10 +9,8 @@ import android.util.Log
 import android.view.View
 import com.dew.edward.dewchat.MainActivity
 import com.dew.edward.dewchat.R
-import com.dew.edward.dewchat.util.AppUtil
-import com.dew.edward.dewchat.util.DbUtil
-import com.dew.edward.dewchat.util.RC_IMAGE_PICK
-import com.dew.edward.dewchat.util.toast
+import com.dew.edward.dewchat.service.FCMService
+import com.dew.edward.dewchat.util.*
 import com.google.firebase.firestore.SetOptions
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
@@ -48,7 +46,7 @@ class SetupActivity : AppCompatActivity() {
             DbUtil.usersRef.document(it)
                     .addSnapshotListener { documentSnapshot,
                                            exception ->
-                        if (exception != null){
+                        if (exception != null) {
                             Log.d(tag, "Exception: ${exception.message}")
                             "You don't have a profile yet!".toast(this)
                             return@addSnapshotListener
@@ -71,6 +69,7 @@ class SetupActivity : AppCompatActivity() {
                                 val country = documentSnapshot.get("country").toString()
                                 setupUserCountry.setText(country)
                             }
+
                         }
                     }
         }
@@ -94,9 +93,14 @@ class SetupActivity : AppCompatActivity() {
         if (country.isNotEmpty()) {
             inputFieldsMap["country"] = country
         }
-
         DbUtil.usersRef.document(DbUtil.mAuth.currentUser?.uid!!)
                 .set(inputFieldsMap, SetOptions.merge())
+
+        val sharePrefManager = SharePrefManager(applicationContext)
+        val token = sharePrefManager.getToken()
+        if (token != null)
+            FCMService.addTokenToFirestore(token)
+
     }
 
     private fun saveUserAccountInformation() {

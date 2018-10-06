@@ -27,6 +27,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var messageReceiverName: String
     private val messageSenderId = DbUtil.currentUserId!!
     private lateinit var adapter: MessageAdapter
+    private var sender: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +54,11 @@ class ChatActivity : AppCompatActivity() {
                             Log.d(tag, "adapter.itemCount = ${adapter.itemCount}")
                         }
                     }
+        }
+        DbUtil.currentUserId?.let {currentUserId ->
+            DbUtil.usersRef.document(currentUserId).get().addOnSuccessListener {
+                sender = it.getString("userFullName")
+            }
         }
 
         chatMessageSendButton.setOnClickListener {
@@ -106,7 +112,8 @@ class ChatActivity : AppCompatActivity() {
                                         from = messageSenderId,
                                         date = AppUtil.currentDate,
                                         time = AppUtil.currentTime,
-                                        index = AppUtil.currentTimeInMillis
+                                        index = AppUtil.currentTimeInMillis,
+                                        senderName = sender ?: ""
                                 )
                                 DbUtil.currentUserId?.let {
                                     DbUtil.messagesRef
@@ -159,7 +166,8 @@ class ChatActivity : AppCompatActivity() {
                 from = messageSenderId,
                 date = AppUtil.currentDate,
                 time = AppUtil.currentTime,
-                index = AppUtil.currentTimeInMillis
+                index = AppUtil.currentTimeInMillis,
+                senderName = sender ?: ""
                 )
         DbUtil.messagesRef.document(messageSenderId)
                 .collection(messageReceiverId)

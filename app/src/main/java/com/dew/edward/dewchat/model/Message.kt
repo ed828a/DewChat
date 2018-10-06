@@ -10,5 +10,6 @@ data class Message(
         val from: String = "",
         val date: String = "",
         val time: String = "",
-        val index: Long = 0
+        val index: Long = 0,
+        val senderName: String = ""
 )

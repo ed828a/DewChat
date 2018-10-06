@@ -111,7 +111,9 @@ class AppUtil {
             }
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
+
     }
+
 }
 //
 //fun main(args: Array<String>) {
