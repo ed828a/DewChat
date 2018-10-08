@@ -1,18 +1,25 @@
 package com.dew.edward.dewchat.ui
 
 import android.content.Intent
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
 import com.dew.edward.dewchat.R
 import com.dew.edward.dewchat.util.toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_reset_password.*
 
 class ResetPasswordActivity : AppCompatActivity() {
+    private val tag: String = this.javaClass.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_password)
+
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+        }
 
         resetSubmitButton.setOnClickListener {
             val email = resetEmailAddress.text.toString().trim()
@@ -27,6 +34,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                                 sendUserToLoginActivity()
                             } else {
                                 "Error: ${task.exception?.message}".toast(this)
+                                Log.d(tag, "Error: ${task.exception?.message}")
                             }
                         }
             }
@@ -35,7 +43,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun sendUserToLoginActivity() {
         val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
+        finish()
     }
 }

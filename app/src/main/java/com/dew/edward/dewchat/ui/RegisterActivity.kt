@@ -1,40 +1,34 @@
 package com.dew.edward.dewchat.ui
 
-import android.app.ProgressDialog
 import android.content.Intent
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
 import com.dew.edward.dewchat.R
-import com.dew.edward.dewchat.di.DewChatApp
+import com.dew.edward.dewchat.app.DewChatApp
 import com.dew.edward.dewchat.util.DbUtil
-import com.dew.edward.dewchat.util.AppUtil.Companion.showProgressDialog
 import com.dew.edward.dewchat.util.toast
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
     private val tag: String = this.javaClass.simpleName
 
-
-    private lateinit var loadingBar: ProgressDialog
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-
-        loadingBar = ProgressDialog(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
         registerCreateAccount.setOnClickListener {
             // create a new account
-            val email = registerLoginEmail.text.trim().toString()
+            val email = inputTextRegisterEmail.text.trim().toString()
             if (email.isEmpty()) {
                 "please input your email...".toast(this)
                 return@setOnClickListener
             }
 
-            val password = registerLoginPassword.text.trim().toString()
+            val password = inputTextRegisterPassword.text.trim().toString()
             if (password.isEmpty()) {
                 "please input your password".toast(this)
                 return@setOnClickListener
@@ -49,12 +43,11 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            showProgressDialog(loadingBar, "Create new account",
-                    "Creating your new account...")
+            registerProgressBar.visibility = View.VISIBLE
 
             DbUtil.mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
-                        loadingBar.dismiss()
+                        registerProgressBar.visibility = View.GONE
 
                         if (task.isSuccessful) {
                             if (DewChatApp.isNeedEmailVerification) {
@@ -88,13 +81,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun sendUserToSetupActivity() {
         val setupIntent = Intent(this@RegisterActivity, SetupActivity::class.java)
-        setupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(setupIntent)
         finish()
     }
     private fun sendUserToLoginActivity() {
         val loginIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
-        loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(loginIntent)
         finish()
     }

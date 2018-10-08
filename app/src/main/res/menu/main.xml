@@ -2,20 +2,42 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/options_action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/user_profile"
-        android:title="Profile"
+        android:id="@+id/options_user_profile"
+        android:title="@string/profile"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/account_details"
-        android:title="Account Details"
+        android:id="@+id/options_account_details"
+        android:title="@string/account_details"
         app:showAsAction="never"/>
 
-    <item android:id="@+id/settings_sign_out"
+    <item android:id="@+id/options_settings_sign_out"
         android:orderInCategory="101"
-        android:title="Sign out" />
+        android:title="@string/sign_out" />
+
+    <item
+        android:id="@+id/options_add_post"
+        android:icon="@drawable/add_post_high"
+        android:title="@string/gallery"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/options_user_summary"
+        android:title="Summary"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/options_find_friend"
+        android:title="Find a Friend"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/options_friends"
+        android:title="Friends"
+        app:showAsAction="never"/>
+    <item android:id="@+id/options_home"
+        android:title="Home"
+        app:showAsAction="never"/>
+
 </menu>
